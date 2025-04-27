@@ -1,0 +1,7 @@
+---
+- name: Install Jenkins using role
+  hosts: all
+  become: yes
+
+  roles:
+    - install_jenkins

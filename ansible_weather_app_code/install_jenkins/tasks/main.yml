@@ -1,0 +1,54 @@
+---
+# tasks file for install_jenkins
+---
+- name: Install Java (Jenkins dependency)
+  apt:
+    name: openjdk-11-jdk
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install Java (Jenkins dependency) for RedHat
+  yum:
+    name: java-11-openjdk
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Add Jenkins repository key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Add Jenkins repository
+  apt_repository:
+    repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Add Jenkins repo for RedHat
+  yum_repository:
+    name: jenkins
+    description: Jenkins repo
+    baseurl: http://pkg.jenkins.io/redhat-stable
+    gpgcheck: no
+  when: ansible_os_family == "RedHat"
+
+- name: Install Jenkins on RedHat
+  yum:
+    name: jenkins
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Start and enable Jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes

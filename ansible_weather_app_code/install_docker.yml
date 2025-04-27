@@ -1,0 +1,5 @@
+---
+- hosts: all
+  become: true  # Ensure that you run the playbook with root privileges
+  roles:
+    - install_docker
